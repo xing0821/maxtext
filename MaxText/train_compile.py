@@ -163,9 +163,14 @@ def main(argv: Sequence[str]) -> None:
     print("Saving compiled object...")
     save_compiled(compiled, config.compiled_trainstep_file)
     print(f"Successfully saved compiled object as {config.compiled_trainstep_file}")
+
+  analysis = compiled.memory_analysis()
   print("Finished train_compile.py successfully!", flush=True)
   print(f"Cost analysis: {compiled.cost_analysis()}")
-  print(f"Memory analysis: {compiled.memory_analysis()}")
+  print(f"Memory analysis: {analysis}")
+  bytes = analysis.generated_code_size_in_bytes + analysis.argument_size_in_bytes + analysis.output_size_in_bytes + analysis.alias_size_in_bytes + analysis.temp_size_in_bytes + analysis.host_generated_code_size_in_bytes + analysis.host_argument_size_in_bytes + analysis.host_output_size_in_bytes + analysis.host_alias_size_in_bytes + analysis.host_temp_size_in_bytes
+  bytes = bytes / 1024 / 1024 / 1024
+  print(f"total memory cost {bytes}GB")
 
 
 if __name__ == "__main__":
